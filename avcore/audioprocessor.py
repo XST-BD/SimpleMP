@@ -12,7 +12,7 @@ import av.datasets
 from . import compatcheck
 from . import debuglog
 
-import simplempcore
+from . import simplempcore
 
 def smpMediaProcessor(
     # --------------------
@@ -29,7 +29,7 @@ def smpMediaProcessor(
     samplerate: int = 44100,        # sample rate in Hz (defasult : 44.1khz)
     sample_fmt: str = "",           # e.g., pcm_s16le, pcm_f32le
     channels: int = 2,              # number of audio channels  (default : stereo)
-    volume: float = 1.0,            # volume adjustment (linear)
+    volume: int = 1,            # volume adjustment (linear)
     audio_filter: str = "",         # e.g., "highpass=f=300"
     normalize: bool = False,        # normalize audio
     start_time: float = 0.0,        # start time (seek)
