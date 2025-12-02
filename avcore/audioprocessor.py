@@ -12,7 +12,7 @@ import av.datasets
 import compatcheck
 import debuglog
 
-from . import simplempcore
+import simplempcore
 
 def smpMediaProcessor(
     # --------------------
@@ -29,7 +29,7 @@ def smpMediaProcessor(
     samplerate: int = 44100,        # sample rate in Hz (defasult : 44.1khz)
     sample_fmt: str = "",           # e.g., pcm_s16le, pcm_f32le
     channels: int = 2,              # number of audio channels  (default : stereo)
-    volume: int = 1,            # volume adjustment (linear)
+    volume: int = 1,                # volume adjustment (linear)
     audio_filter: str = "",         # e.g., "highpass=f=300"
     normalize: bool = False,        # normalize audio
     start_time: float = 0.0,        # start time (seek)
@@ -105,12 +105,18 @@ def smpMediaProcessor(
 
     # ==== check file extenstion and codec compatibility with settings
     ext = os.path.splitext(outputfilename)[1].lower()
-    if not compatcheck.checkMediaCompatibility(ext, codec_audio, codec_video, samplerate, sample_fmt, bitrate):
+    if not compatcheck.checkMediaCompatibility(
+        ext, 
+        codec_audio, codec_video, 
+        samplerate, sample_fmt, 
+        bitrate, bitrate_video
+    ):
         return
     
     simplempcore.smpcore(inputfilename, outputfilename, 
                          codec_audio, codec_video, 
                          bitrate, 
+                         bitrate_video,
                          samplerate, sample_fmt, 
                          frame_rate, 
                          channels, 
@@ -119,14 +125,15 @@ def smpMediaProcessor(
 
 
 smpMediaProcessor("../dump/v2v/testvdo.mp4", 
-                  "../dump/v2v/some.mp4",
-                  codec_audio="mp3", 
+                  "../dump/v2v/some.mkv",
+                  codec_audio="aac", 
                   channels=2,
                   bitrate=44100, 
                   samplerate=32000,
                   sample_fmt="",
-                  codec_video="hevc",
+                  codec_video="vp8",
+                  bitrate_video=1000000,
                   frame_rate=60,
-                  width=800,
-                  height=600,
+                  width=1080,
+                  height=720,
                   debug=False)

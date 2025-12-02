@@ -1,15 +1,22 @@
+from email.mime import audio
 from fractions import Fraction
 from numbers import Rational
 from random import sample
 from struct import pack
+
 import av
 import av.codec
 import av.datasets
+
 from av.audio.stream import AudioStream
 from av.audio.resampler import AudioResampler
 
 from av.video.stream import VideoStream
 from av.video.reformatter import VideoReformatter
+
+from av.subtitles.stream import SubtitleStream
+
+from av.container import InputContainer, OutputContainer
 
 from typing import cast
 
@@ -40,12 +47,50 @@ from typing import cast
 # output.close()
 
 
+def processMedia(
+        incontainer : InputContainer,
+        outcontainer : OutputContainer,
+        stream_map = {},
+        width : int = 800, 
+        height : int = 600,
+):
+    
+    for packet in incontainer.demux():
+        
+        if packet.stream_index not in stream_map:
+            continue
+
+        info = stream_map[packet.stream_index]
+
+        for frame in packet.decode():
+
+            if info["type"] == "audio":
+                frame = info["resampler"].resample(frame)
+                for f in frame:
+                    for outpacket in info["ostream"].encode(f):
+                        outcontainer.mux(outpacket)
+            
+            elif info["type"] == "video": 
+                rescaled_frame = frame.reformat(width=width, height=height, format="yuv420p") # type: ignore
+                for outpacket in info["ostream"].encode(rescaled_frame):
+                    outcontainer.mux(outpacket)
+            
+            elif info["type"] == "subtitle":
+                outcontainer.mux(packet)
+
+    # Flush all streams
+    for info in stream_map.values():
+        for packet_out in info["ostream"].encode(None):
+            outcontainer.mux(packet_out)
+
+
 def smpcore(
         inputfilename : str,
         outputfilename : str,
         audio_codecname : str,
         video_codecname : str,
         bitrate : int, 
+        bitrate_vdo : int,
         sample_rate : int, 
         sample_fmt : str,
         frame_rate: int,
@@ -54,4 +99,60 @@ def smpcore(
         height : int,
 ):
     
-   
+    incontainer = av.open(inputfilename)
+    outcontainer = av.open(outputfilename, mode="w")
+
+    # map media stream (audio / video / subtitle) to output streams
+    stream_map = {}
+
+    for istreams in incontainer.streams:
+      
+        if istreams.type == "audio": 
+            # print('Audio stream detected')
+
+            ostreama = cast(AudioStream, outcontainer.add_stream(
+                codec_name=audio_codecname,
+                rate=sample_rate, 
+            ))
+            ostreama.bit_rate = bitrate
+            # ostreama.channels = channels
+            
+            resampler = AudioResampler(
+                # format=sample_fmt, 
+                # layout=ostreama.layout,
+                rate=sample_rate,
+            )
+
+            stream_map[istreams.index] = { "type": "audio", "ostream":ostreama, "resampler":resampler}
+
+
+        elif istreams.type == "subtitle":
+            # print('Subtitle stream detected')
+
+            ostreams = cast(SubtitleStream, outcontainer.add_stream_from_template(istreams))
+            stream_map[istreams.index] = {"type":"subtitle", "ostream":ostreams}
+
+        elif istreams.type == "video": 
+            # print('Video stream detected')
+
+            ostreamv = cast(VideoStream, outcontainer.add_stream(
+                codec_name=video_codecname,
+                rate=frame_rate,
+            ))
+            ostreamv.bit_rate = bitrate_vdo 
+            ostreamv.options = {"crf":"24", "preset":"medium"}
+            ostreamv.pix_fmt="yuv420p"
+            ostreamv.height=height
+            ostreamv.width=width
+            ostreamv.time_base = Fraction(1, frame_rate)
+            
+            stream_map[istreams.index] = {"type":"video", "ostream":ostreamv}
+
+        else: 
+            print('SimpleMP: Unknown media stream detected')
+
+
+    processMedia(incontainer, outcontainer, stream_map, width, height)
+    
+    incontainer.close()
+    outcontainer.close()

@@ -361,7 +361,7 @@ def checkVideoSamplefmtCompatibility(codecname, sample_fmt) -> bool:
 
 
 
-def checkMediaCompatibility(ext, audio_codecname, video_codecname, samplerate, samplefmt, bitrate : int) -> bool: 
+def checkMediaCompatibility(ext, audio_codecname, video_codecname, samplerate, samplefmt, bitrate : int, bitrate_video : int) -> bool: 
 
     mediatype = -1
 
