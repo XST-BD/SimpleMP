@@ -1,5 +1,6 @@
 import code
 from random import sample
+import re
 
 # don't remove . from keys. It's for explicitly describing extension name
 codec_dict = {
@@ -43,13 +44,20 @@ codec_dict = {
     ".wmv"  : ["wmv1"],
 }
 
+audio_codecs = {"aac", "alac", 
+                "flac", 
+                "mp3",
+                "opus",
+                "pcm_alaw", "pcm_mulaw", "pcm_s8", "pcm_s16le", "pcm_s16be", "pcm_s24le", "pcm_s24be", "pcm_s32le", "pcm_s32be", 
+                "speex",
+                "vorbis",
+                "wmav1", "wmav2", 
+            }
+
 bitrate_range_dict = {
 
     # Compressed audio codecs
     "aac": [64000, 320000],
-    "aac (fdk)": [64000, 320000],
-    "amr_nb": [4750, 12200],       # AMR Narrowband
-    "amr_wb": [6600, 23850],       # AMR Wideband
     "mp3": [64000, 320000],
     "opus": [500, 256000],          # 0.5 kbps → 256 kbps
     "vorbis": [36000, 380000],     
@@ -61,23 +69,6 @@ bitrate_range_dict = {
 
     "wmapro": [12000, 384000], 
     "wmalossless": [12000, 384000], # technically lossless can vary
-
-    # Lossless / PCM codecs → bitrate irrelevant
-    "alac": None,
-    "flac": None,
-    "pcm_alaw": None,
-    "pcm_mulaw": None,
-    "s16": None,
-    "s24": None,
-    "s32": None,
-    "flt": None,
-    "dbl": None,
-    "s16p": None,
-    "s24p": None,
-    "s32p": None,
-    "fltp": None,
-    "dblp": None,
-    "u8": None
 }
 
 samplerate_range_dict = {
@@ -103,8 +94,6 @@ samplerate_range_dict = {
     "pcm_s16be": [8000, 192000],
     "pcm_s24be": [8000, 192000],
     "pcm_s32be": [8000, 192000],
-    "pcm_f32": [8000, 192000],
-    "pcm_f64": [8000, 192000],
 }
 
 codec_channels_dict = {
@@ -180,7 +169,7 @@ audio_sample_fmt_dict = {
 video_sample_fmt_dict = {
     "av1": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le"],
 
-    "h264": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le", "nv12"],
+    "h264": ["yuv420p", "yuv422p", "yuv444p", "nv12"],
     "libx264": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le", "nv12"],
     "libopenh264": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le", "nv12"],
 
@@ -197,16 +186,6 @@ video_sample_fmt_dict = {
     "mpeg4": ["yuv420p"],
     "wmv1" : ["yuv420p"],
     "wmv2" : ["yuv420p"],
-
-    # Lossless / uncompressed video
-    "rawvideo": ["rgb24", "bgr24", "rgba", "bgra", "yuv420p", "yuv422p", "yuv444p", "gray", "yuv420p10le", "yuv422p10le"],
-
-    # Proprietary (Unavailable to use at API)
-    "prores": ["yuv422p10le", "yuv444p10le"],
-    "dnxhd": ["yuv422p", "yuv422p10le"],
-
-    # Placeholder for other codecs, default to common 8-bit YUV
-    "default": ["yuv420p", "yuv422p", "yuv444p", "rgb24"]
 }
 
 frame_rate_dict = {
@@ -220,7 +199,7 @@ profile_list = {"baseline", "high", "main"}
 tune_list = {"animation", "fastdecode", "film", "grain", "stillimage", "zerolatency"}
 
 # list of video codecs that support crf, preset, profile and tune
-codec_cppt_support_list = {"h264", "libx264", "libopenh264", "h265", "libx265", "hevc"}
+codec_cppt_support_list = {"h264"}
 # list of video codecs that support crf, preset and profile but not tune
 codec_cpp_support_list = {"av1", "vp9"}
 
@@ -233,17 +212,9 @@ media_type_ext_dict = {
         ".oga", ".ogg", ".opus", 
         ".wav", ".wma" 
     ],
-    "subtitle": [
-        ".ass",
-        ".dfxp",
-        ".idx",
-        ".scc", ".srt", ".ssa", ".stl", ".sub", ".sup",
-        ".ttml",
-        ".vtt",
-    ],
+    
     "video": [
-        # ".3gp",
-        ".asf", ".avi"
+        ".asf", ".avi",
         ".flv",
         ".m4v" , ".mkv", ".mov", ".mp4", ".mpg", "mpeg",
         ".ts",
@@ -254,7 +225,7 @@ media_type_ext_dict = {
 def checkCodecCompatibility(ext, codecname) -> bool:
 
     # 1: Check extension
-    if ext not in codec_dict: 
+    if ext not in codec_dict : 
         print(f"SimpleMP: Unknownn media file extension: {codecname}")
         return False
 
@@ -268,11 +239,21 @@ def checkCodecCompatibility(ext, codecname) -> bool:
 
     # 3: Check codec compatibility with file extension
     if codecname not in codec_dict[ext]: 
-        print(f"SimpleMP: Unsupported codec for converstion to {ext}\n"
+        print(f"SimpleMP: Unsupported codec[{codecname}] for converstion to {ext}\n"
               f"Supported codecs are:\n"
               f"{codec_dict[ext]}")
         return False
 
+    return True
+
+def checkAudioCodec(codecname) -> bool: 
+
+    if codecname == "": return True     # in case of defaults
+
+    if codecname not in audio_codecs:
+        print(f"SimpleMP: Unknown audio codec[{codecname}] found: {codecname}")
+        return False
+    
     return True
 
 def checkBitrateCompatibility(codecname, bitrate : int) -> bool:
@@ -289,17 +270,6 @@ def checkBitrateCompatibility(codecname, bitrate : int) -> bool:
     return True
 
 def checkSamplerateCompatibility(codecname, samplerate) -> bool:
-
-    # fixed sample rate for amr_nb and amr_wb
-    if codecname == "amr_nb": 
-        if samplerate != 8000: 
-            print(f"SimpleMP: Only 8khz sample rate allowed for codec: {codecname}")
-            return False
-
-    if codecname == "amr_wb": 
-        if samplerate != 16000: 
-            print(f"SimpleMP: Only 16khz sample rate allowed for codec: {codecname}")
-            return False
         
     if codecname == "aac" or codecname == "wmav1" or codecname == "wmav2" or codecname == "mp3":
         if samplerate not in samplerate_range_dict[codecname]: 
@@ -354,26 +324,33 @@ def checkMediaCompatibility(ext,
     mediatype = -1
 
     if ext in media_type_ext_dict["audio"]: mediatype = 0
-    if ext in media_type_ext_dict["subtitle"]: mediatype = 1
-    if ext in media_type_ext_dict["video"]: mediatype = 2
+    if ext in media_type_ext_dict["video"]: mediatype = 1
 
-    if not checkCodecCompatibility(ext, audio_codecname): 
-        return False
-
-    if not checkCodecCompatibility(ext, video_codecname): 
-        return False
+    print(f"File extension: {ext}")
     
     match mediatype: 
         # Audio
         case 0:
+            if not checkCodecCompatibility(ext, audio_codecname):  return False
             if not checkBitrateCompatibility(audio_codecname, bitrate): return False
             if not checkSamplerateCompatibility(audio_codecname, samplerate): return False
             if not checkAudioSamplefmtCompatibility(audio_codecname, samplefmt): return False
     
-        # Video
-        case 2: 
+        # Video (check both audio and video for streams)
+        case 1: 
+            if audio_codecname != "":
+                if not checkAudioCodec(audio_codecname) : return False
+                if not checkBitrateCompatibility(audio_codecname, bitrate): return False
+                if not checkSamplerateCompatibility(audio_codecname, samplerate): return False
+                if not checkAudioSamplefmtCompatibility(audio_codecname, samplefmt): return False
+
+            if not checkCodecCompatibility(ext, video_codecname): return False
             if not checkBitrateCompatibility(video_codecname, bitrate): return False
             if not checkVideoSamplefmtCompatibility(video_codecname, pixel_fmt): return False
+
+        case _:
+            print("Unknonwn or unsupported media type detected")
+            return False
 
     return True
 

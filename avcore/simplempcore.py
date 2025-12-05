@@ -23,6 +23,7 @@ from typing import cast
 
 from multidict import istr
 
+from compatcheck import codec_cppt_support_list, codec_cpp_support_list
 
 def processMedia(
         incontainer : InputContainer,
@@ -44,7 +45,7 @@ def processMedia(
 
             if info["type"] == "audio":
 
-                if not mute : 
+                if not mute: 
                     frame = info["resampler"].resample(frame)
                     for f in frame:
                         for outpacket in info["ostream"].encode(f):
@@ -98,7 +99,7 @@ def smpcore(
 
     for istreams in incontainer.streams:
       
-        if istreams.type == "audio": 
+        if istreams.type == "audio" and audio_codecname != "": 
             # print('Audio stream detected')
             ostreama = cast(AudioStream, outcontainer.add_stream(
                 codec_name=audio_codecname,
@@ -129,7 +130,13 @@ def smpcore(
                 rate=frame_rate,
             ))
             ostreamv.bit_rate = bitrate_vdo 
-            ostreamv.options = {"crf":str(crf), "preset":preset, "profile":profile, "tune":tune}
+
+            if video_codecname in codec_cppt_support_list: 
+                ostreamv.options = {"crf":str(crf), "preset":preset, "profile":profile, "tune":tune}
+
+            if video_codecname in codec_cpp_support_list: 
+                ostreamv.options = {"crf":str(crf), "preset":preset, "profile":profile}
+
             ostreamv.pix_fmt=pixel_fmt
             ostreamv.height=height
             ostreamv.width=width

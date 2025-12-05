@@ -1,17 +1,9 @@
-import code
-from email.policy import default
 import os
-from random import sample
-
-from typing import Optional, Tuple
 
 import av
-import av.container
-import av.datasets
+import av.logging
 
 import compatcheck
-import debuglog
-
 import simplempcore
 
 def smpMediaProcessor(
@@ -40,17 +32,19 @@ def smpMediaProcessor(
     width: int = 800,               # output width
     height: int = 600,              # output height
     frame_rate: int = 30,           # fps (default : 30fps)                        
-    crf: int = 0,                   # constant rate factor for quality-based encoding
-    preset: str = "",               # encoder preset (fast, slow, etc.)
-    profile : str = "", 
-    tune : str = "",
+    crf: int = 24,                  # constant rate factor for quality-based encoding
+    preset: str = "fast",           # encoder preset
+    profile : str = "high", 
+    tune : str = "zerolatency",
 ):
     """
     Unified media processor function for audio, video, image, and subtitles.
     
     Parameters grouped by media type and relevance.
     """
-    
+    if debug: 
+        av.logging.set_level(av.logging.DEBUG)
+
     # ===== check file existence
 
     if not inputfilename or not os.path.exists(inputfilename): 
@@ -71,17 +65,14 @@ def smpMediaProcessor(
 
     if overwrite: 
         outputfilename = inputfilename
-    
-    # ==== debug
-    debuglog.debuglog(input, debug)
 
     # ==== check file extenstion and codec compatibility with settings
     ext = os.path.splitext(outputfilename)[1].lower()
     if not compatcheck.checkMediaCompatibility(
         ext, 
-        codec_audio, codec_video, 
-        samplerate, sample_fmt, pixel_fmt,
-        bitrate, bitrate_video
+        audio_codecname=codec_audio, video_codecname=codec_video, 
+        samplerate=samplerate, samplefmt=sample_fmt, pixel_fmt=pixel_fmt,
+        bitrate=bitrate, bitrate_video=bitrate_video
     ):
         return
     
@@ -98,17 +89,16 @@ def smpMediaProcessor(
 
 
 smpMediaProcessor(
-            inputfilename="../dump/", 
-            outputfilename="../dump/a2a/subtitle0.ass",
+            inputfilename="../dump/v2v/testvdo.flv", 
+            outputfilename="../dump/v2v/video0.mp4",
 
             # Audio
-            codec_audio="pcm_s32le", bitrate=2000, sample_fmt="s32p", samplerate=8000,
+            # codec_audio="vorbis", bitrate=44100, sample_fmt="fltp", samplerate=48000,
 
             # Video
-            codec_video="h264", bitrate_video=4000000, pixel_fmt="yuv420p", frame_rate=24, width=1280, height=720,
-            crf=24, tune="zerolatency", profile="high", preset="fast",
+            codec_video="av1", bitrate_video=4000000, pixel_fmt="yuv420p", frame_rate=60, width=1280, height=720,
+            # crf=24, tune="zerolatency", profile="high", preset="fast",
         
-
             # General
             threads=4, mute=False, loop=1, debug=False,
         )
