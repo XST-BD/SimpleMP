@@ -48,7 +48,7 @@ codec_dict = {
     ".flv"  : ["flv", "h264"],
     ".m4v"  : ["h264", "mpeg4"],
     ".mov"  : ["h264", "hevc", "mpeg4"],
-    ".mp4"  : ["h264", "hevc", "mpeg4", "libx264", "libx265", "libopenh264", "av1"],
+    ".mp4"  : ["h264", "hevc", "mpeg4", "av1"],
     ".mpg"  : ["mpeg1video", "mpeg2video"],
     ".mpeg" : ["mpeg1video", "mpeg2video"],
     ".mkv"  : ["h264", "hevc", "mpeg4", "vp8", "vp9", "av1"],
