@@ -1,12 +1,14 @@
 import os
+from typeguard import typechecked
 
 import av
 import av.logging
 
-import compatcheck
+import avcore.validator as validator
 import simplempcore
 
-def smpMediaProcessor(
+@typechecked
+def transcode(
     # --------------------
     # General (all media types)
     inputfilename: str = "",
@@ -68,7 +70,7 @@ def smpMediaProcessor(
 
     # ==== check file extenstion and codec compatibility with settings
     ext = os.path.splitext(outputfilename)[1].lower()
-    if not compatcheck.checkMediaCompatibility(
+    if not validator.checkMediaCompatibility(
         ext, 
         audio_codecname=codec_audio, video_codecname=codec_video, 
         samplerate=samplerate, samplefmt=sample_fmt, pixel_fmt=pixel_fmt,
@@ -88,12 +90,12 @@ def smpMediaProcessor(
             )
 
 
-smpMediaProcessor(
+transcode(
             inputfilename="../dump/v2v/testvdo.flv", 
             outputfilename="../dump/v2v/video0.mp4",
 
             # Audio
-            # codec_audio="vorbis", bitrate=44100, sample_fmt="fltp", samplerate=48000,
+            codec_audio="vorbis", bitrate=44100, sample_fmt="fltp", samplerate=48000,
 
             # Video
             codec_video="av1", bitrate_video=4000000, pixel_fmt="yuv420p", frame_rate=60, width=1280, height=720,

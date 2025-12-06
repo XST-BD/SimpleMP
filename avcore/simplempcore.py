@@ -19,12 +19,12 @@ from av.subtitles.stream import SubtitleStream
 
 from av.container import InputContainer, OutputContainer
 
+from typeguard import typechecked
 from typing import cast
 
-from multidict import istr
+from avcore.validator import codec_cppt_support_list, codec_cpp_support_list
 
-from compatcheck import codec_cppt_support_list, codec_cpp_support_list
-
+@typechecked
 def processMedia(
         incontainer : InputContainer,
         outcontainer : OutputContainer,
@@ -66,7 +66,7 @@ def processMedia(
         for packet_out in info["ostream"].encode(None):
             outcontainer.mux(packet_out)
 
-
+@typechecked
 def smpcore(
         inputfilename : str,
         outputfilename : str,

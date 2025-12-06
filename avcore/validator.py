@@ -1,7 +1,3 @@
-import code
-from random import sample
-import re
-
 # don't remove . from keys. It's for explicitly describing extension name
 codec_dict = {
 
@@ -222,7 +218,7 @@ media_type_ext_dict = {
     ],
 }
 
-def checkCodecCompatibility(ext, codecname) -> bool:
+def checkCodecCompatibility(ext : str, codecname : str) -> bool:
 
     # 1: Check extension
     if ext not in codec_dict : 
@@ -246,7 +242,7 @@ def checkCodecCompatibility(ext, codecname) -> bool:
 
     return True
 
-def checkAudioCodec(codecname) -> bool: 
+def checkAudioCodec(codecname : str) -> bool: 
 
     if codecname == "": return True     # in case of defaults
 
@@ -256,7 +252,7 @@ def checkAudioCodec(codecname) -> bool:
     
     return True
 
-def checkBitrateCompatibility(codecname, bitrate : int) -> bool:
+def checkBitrateCompatibility(codecname : str, bitrate : int) -> bool:
 
     # irrelevant for lossless codecs
     if bitrate_range_dict.get(codecname) is None: 
@@ -269,7 +265,7 @@ def checkBitrateCompatibility(codecname, bitrate : int) -> bool:
 
     return True
 
-def checkSamplerateCompatibility(codecname, samplerate) -> bool:
+def checkSamplerateCompatibility(codecname : str, samplerate) -> bool:
         
     if codecname == "aac" or codecname == "wmav1" or codecname == "wmav2" or codecname == "mp3":
         if samplerate not in samplerate_range_dict[codecname]: 
@@ -316,8 +312,8 @@ def checkVideoSamplefmtCompatibility(codecname, pixel_fmt) -> bool:
 
 
 
-def checkMediaCompatibility(ext, 
-                            audio_codecname, video_codecname,
+def checkMediaCompatibility(ext : str, 
+                            audio_codecname : str, video_codecname : str,
                             samplerate, samplefmt : str, pixel_fmt : str,
                             bitrate : int, bitrate_video : int) -> bool: 
 
@@ -345,7 +341,7 @@ def checkMediaCompatibility(ext,
                 if not checkAudioSamplefmtCompatibility(audio_codecname, samplefmt): return False
 
             if not checkCodecCompatibility(ext, video_codecname): return False
-            if not checkBitrateCompatibility(video_codecname, bitrate): return False
+            if not checkBitrateCompatibility(video_codecname, bitrate_video): return False
             if not checkVideoSamplefmtCompatibility(video_codecname, pixel_fmt): return False
 
         case _:
