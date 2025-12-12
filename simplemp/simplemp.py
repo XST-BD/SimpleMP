@@ -4,7 +4,7 @@ from typeguard import typechecked
 import av
 import av.logging
 
-from .validator import checkMediaCompatibility
+from .validator import check_media_compat
 from .simplempcore import smpcore
 
 @typechecked
@@ -71,7 +71,7 @@ def transcode(
     mediatype : int = 0
     # ==== check file extenstion and codec compatibility with settings
     ext = os.path.splitext(outputfilename)[1].lower()
-    if not checkMediaCompatibility(
+    if not check_media_compat(
         ext, 
         audio_codecname=codec_audio, video_codecname=codec_video, 
         samplerate=samplerate, samplefmt=sample_fmt, pixel_fmt=pixel_fmt,

@@ -235,7 +235,7 @@ media_type_ext_dict = {
     ],
 }
 
-def checkCodecCompatibility(ext : str, codecname : str) -> bool:
+def check_codec_compat(ext : str, codecname : str) -> bool:
 
     # 1: Check extension
     if ext not in codec_dict : 
@@ -259,7 +259,7 @@ def checkCodecCompatibility(ext : str, codecname : str) -> bool:
 
     return True
 
-def checkAudioCodec(codecname : str) -> bool: 
+def check_audio_codec(codecname : str) -> bool: 
 
     if codecname == "": return True     # in case of defaults
 
@@ -269,7 +269,7 @@ def checkAudioCodec(codecname : str) -> bool:
     
     return True
 
-def checkBitrateCompatibility(codecname : str, bitrate : int) -> bool:
+def check_bitrate_compat(codecname : str, bitrate : int) -> bool:
 
     # irrelevant for lossless codecs
     if bitrate_range_dict.get(codecname) is None: 
@@ -282,7 +282,7 @@ def checkBitrateCompatibility(codecname : str, bitrate : int) -> bool:
 
     return True
 
-def checkSamplerateCompatibility(codecname : str, samplerate) -> bool:
+def check_samplerate_compat(codecname : str, samplerate) -> bool:
         
     if codecname == "aac" or codecname == "wmav1" or codecname == "wmav2" or codecname == "mp3":
         if samplerate not in samplerate_range_dict[codecname]: 
@@ -299,7 +299,7 @@ def checkSamplerateCompatibility(codecname : str, samplerate) -> bool:
 
     return True
 
-def checkAudioSamplefmtCompatibility(codecname : str, sample_fmt : str) -> bool:
+def check_samplefmt_compat(codecname : str, sample_fmt : str) -> bool:
 
     # if not set, default will be used
     if sample_fmt == "":
@@ -317,7 +317,7 @@ def checkAudioSamplefmtCompatibility(codecname : str, sample_fmt : str) -> bool:
     
     return True 
 
-def checkVideoSamplefmtCompatibility(ext, codecname, pixel_fmt) -> bool:
+def check_pixfmt_compat(ext, codecname, pixel_fmt) -> bool:
 
     if pixel_fmt not in pixel_fmt_dict[ext]: 
         print(f"SampleMP: Incompatible sample format for extension: {ext}\n"
@@ -335,7 +335,7 @@ def checkVideoSamplefmtCompatibility(ext, codecname, pixel_fmt) -> bool:
 
 
 
-def checkMediaCompatibility(ext : str, 
+def check_media_compat(ext : str, 
                             audio_codecname : str, video_codecname : str,
                             samplerate, samplefmt : str, pixel_fmt : str,
                             bitrate : int, bitrate_video : int,
@@ -351,22 +351,22 @@ def checkMediaCompatibility(ext : str,
     match mediatype: 
         # Audio
         case 0:
-            if not checkCodecCompatibility(ext, audio_codecname):  return False
-            if not checkBitrateCompatibility(audio_codecname, bitrate): return False
-            if not checkSamplerateCompatibility(audio_codecname, samplerate): return False
-            if not checkAudioSamplefmtCompatibility(audio_codecname, samplefmt): return False
+            if not check_codec_compat(ext, audio_codecname):  return False
+            if not check_bitrate_compat(audio_codecname, bitrate): return False
+            if not check_samplerate_compat(audio_codecname, samplerate): return False
+            if not check_samplefmt_compat(audio_codecname, samplefmt): return False
     
         # Video (check both audio and video for streams)
         case 1: 
             if audio_codecname != "":
-                if not checkAudioCodec(audio_codecname) : return False
-                if not checkBitrateCompatibility(audio_codecname, bitrate): return False
-                if not checkSamplerateCompatibility(audio_codecname, samplerate): return False
-                if not checkAudioSamplefmtCompatibility(audio_codecname, samplefmt): return False
+                if not check_audio_codec(audio_codecname) : return False
+                if not check_bitrate_compat(audio_codecname, bitrate): return False
+                if not check_samplerate_compat(audio_codecname, samplerate): return False
+                if not check_samplefmt_compat(audio_codecname, samplefmt): return False
 
-            if not checkCodecCompatibility(ext, video_codecname): return False
-            if not checkBitrateCompatibility(video_codecname, bitrate_video): return False
-            if not checkVideoSamplefmtCompatibility(ext, video_codecname, pixel_fmt): return False
+            if not check_codec_compat(ext, video_codecname): return False
+            if not check_bitrate_compat(video_codecname, bitrate_video): return False
+            if not check_pixfmt_compat(ext, video_codecname, pixel_fmt): return False
 
         case _:
             print("SimpleMP: Unknonwn or unsupported media type detected")
@@ -376,7 +376,7 @@ def checkMediaCompatibility(ext : str,
 
 
 # check video codec's compatibility with crf, preset, profile and tune
-def checkCPPTcompat(codecname : str, crf : int, profile : str, preset : str, tune : str) ->  bool:
+def check_CPPT_compat(codecname : str, crf : int, profile : str, preset : str, tune : str) ->  bool:
 
     if codecname not in codec_cppt_support_list and codecname not in codec_cpp_support_list: 
         print(f"SimpleMP: Codec: {codecname} doesn't support crf, preset, profile and tune")
@@ -408,5 +408,5 @@ def checkCPPTcompat(codecname : str, crf : int, profile : str, preset : str, tun
     return True
 
 
-def checkAudioVideoCompat():
+def check_audio_video_compat():
     pass
