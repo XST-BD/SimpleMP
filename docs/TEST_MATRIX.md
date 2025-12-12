@@ -6,7 +6,7 @@ This document summarizes the compatibility and feature testing performed on the 
 ❌ Fail  
 ⚠️ Partial  
 — Not tested
-
+ 
 ## Audio Tests
 | Extension  | Codec     | Sample Format |  API  | Status |
 |------------|-----------|---------------|-------|--------|
@@ -127,7 +127,9 @@ vorbis not supported with .flv, .webm
 
 flac not supported with .m4v, .webm
 
-# Video Tests
+# Video Tests 1
+(video format compatibility tests against video codecs and pixel formats)
+
 | Extension  | Codec     | Pixel Format  |  API  | Status |
 |------------|-----------|---------------|-------|--------|
 | .asf       | wmv1      | yuv420p       |   Y   |   ✔️   |
@@ -217,5 +219,227 @@ flac not supported with .m4v, .webm
 | .webm      | vp9       | yuv422p10le   |   Y   |   ⚠️   |
 | .webm      | vp9       | yuv444p10le   |   Y   |   ⚠️   |
 | .wmv       | wmv1      | yuv420p       |   Y   |   ✔️   | 
+
+# Video tests 2 
+(video format compatibility tests against audio codecs)
+
+| Extension  | Codec          |  API  | Status |
+|------------|----------------|-------|--------|
+| .asf       | aac            |       |        |
+| .asf       | alac           |       |        |
+| .asf       | flac           |       |        |
+| .asf       | mp3            |       |        |
+| .asf       | opus           |       |        |
+| .asf       | pcm_alaw       |       |        |
+| .asf       | pcm_mulaw      |       |        |
+| .asf       | pcm_s8         |       |        |
+| .asf       | pcm_s16le      |       |        |
+| .asf       | pcm_s16be      |       |        |
+| .asf       | pcm_s24le      |       |        |
+| .asf       | pcm_s24be      |       |        |
+| .asf       | pcm_s32le      |       |        |
+| .asf       | pcm_s32be      |       |        |
+| .asf       | speex          |       |        |
+| .asf       | vorbis         |       |        |
+| .asf       | wmav1          |       |        |
+| .asf       | wmav2          |       |        |
+| .avi       | aac            |       |        |
+| .avi       | alac           |       |        |
+| .avi       | flac           |       |        |
+| .avi       | mp3            |       |        |
+| .avi       | opus           |       |        |
+| .avi       | pcm_alaw       |       |        |
+| .avi       | pcm_mulaw      |       |        |
+| .avi       | pcm_s8         |       |        |
+| .avi       | pcm_s16le      |       |        |
+| .avi       | pcm_s16be      |       |        |
+| .avi       | pcm_s24le      |       |        |
+| .avi       | pcm_s24be      |       |        |
+| .avi       | pcm_s32le      |       |        |
+| .avi       | pcm_s32be      |       |        |
+| .avi       | speex          |       |        |
+| .avi       | vorbis         |       |        |
+| .avi       | wmav1          |       |        |
+| .avi       | wmav2          |       |        |
+| .flv       | aac            |       |        |
+| .flv       | alac           |       |        |
+| .flv       | flac           |       |        |
+| .flv       | mp3            |       |        |
+| .flv       | opus           |       |        |
+| .flv       | pcm_alaw       |       |        |
+| .flv       | pcm_mulaw      |       |        |
+| .flv       | pcm_s8         |       |        |
+| .flv       | pcm_s16le      |       |        |
+| .flv       | pcm_s16be      |       |        |
+| .flv       | pcm_s24le      |       |        |
+| .flv       | pcm_s24be      |       |        |
+| .flv       | pcm_s32le      |       |        |
+| .flv       | pcm_s32be      |       |        |
+| .flv       | speex          |       |        |
+| .flv       | vorbis         |       |        |
+| .flv       | wmav1          |       |        |
+| .flv       | wmav2          |       |        |
+| .m4v       | aac            |       |        |
+| .m4v       | alac           |       |        |
+| .m4v       | flac           |       |        |
+| .m4v       | mp3            |       |        |
+| .m4v       | opus           |       |        |
+| .m4v       | pcm_alaw       |       |        |
+| .m4v       | pcm_mulaw      |       |        |
+| .m4v       | pcm_s8         |       |        |
+| .m4v       | pcm_s16le      |       |        |
+| .m4v       | pcm_s16be      |       |        |
+| .m4v       | pcm_s24le      |       |        |
+| .m4v       | pcm_s24be      |       |        |
+| .m4v       | pcm_s32le      |       |        |
+| .m4v       | pcm_s32be      |       |        |
+| .m4v       | speex          |       |        |
+| .m4v       | vorbis         |       |        |
+| .m4v       | wmav1          |       |        |
+| .m4v       | wmav2          |       |        |
+| .mov       | aac            |       |        |
+| .mov       | alac           |       |        |
+| .mov       | flac           |       |        |
+| .mov       | mp3            |       |        |
+| .mov       | opus           |       |        |
+| .mov       | pcm_alaw       |       |        |
+| .mov       | pcm_mulaw      |       |        |
+| .mov       | pcm_s8         |       |        |
+| .mov       | pcm_s16le      |       |        |
+| .mov       | pcm_s16be      |       |        |
+| .mov       | pcm_s24le      |       |        |
+| .mov       | pcm_s24be      |       |        |
+| .mov       | pcm_s32le      |       |        |
+| .mov       | pcm_s32be      |       |        |
+| .mov       | speex          |       |        |
+| .mov       | vorbis         |       |        |
+| .mov       | wmav1          |       |        |
+| .mov       | wmav2          |       |        |
+| .mp4       | aac            |       |        |
+| .mp4       | alac           |       |        |
+| .mp4       | flac           |       |        |
+| .mp4       | mp3            |       |        |
+| .mp4       | opus           |       |        |
+| .mp4       | pcm_alaw       |       |        |
+| .mp4       | pcm_mulaw      |       |        |
+| .mp4       | pcm_s8         |       |        |
+| .mp4       | pcm_s16le      |       |        |
+| .mp4       | pcm_s16be      |       |        |
+| .mp4       | pcm_s24le      |       |        |
+| .mp4       | pcm_s24be      |       |        |
+| .mp4       | pcm_s32le      |       |        |
+| .mp4       | pcm_s32be      |       |        |
+| .mp4       | speex          |       |        |
+| .mp4       | vorbis         |       |        |
+| .mp4       | wmav1          |       |        |
+| .mp4       | wmav2          |       |        |
+| .mpg       | aac            |       |        |
+| .mpg       | alac           |       |        |
+| .mpg       | flac           |       |        |
+| .mpg       | mp3            |       |        |
+| .mpg       | opus           |       |        |
+| .mpg       | pcm_alaw       |       |        |
+| .mpg       | pcm_mulaw      |       |        |
+| .mpg       | pcm_s8         |       |        |
+| .mpg       | pcm_s16le      |       |        |
+| .mpg       | pcm_s16be      |       |        |
+| .mpg       | pcm_s24le      |       |        |
+| .mpg       | pcm_s24be      |       |        |
+| .mpg       | pcm_s32le      |       |        |
+| .mpg       | pcm_s32be      |       |        |
+| .mpg       | speex          |       |        |
+| .mpg       | vorbis         |       |        |
+| .mpg       | wmav1          |       |        |
+| .mpg       | wmav2          |       |        |
+| .mpeg      | aac            |       |        |
+| .mpeg      | alac           |       |        |
+| .mpeg      | flac           |       |        |
+| .mpeg      | mp3            |       |        |
+| .mpeg      | opus           |       |        |
+| .mpeg      | pcm_alaw       |       |        |
+| .mpeg      | pcm_mulaw      |       |        |
+| .mpeg      | pcm_s8         |       |        |
+| .mpeg      | pcm_s16le      |       |        |
+| .mpeg      | pcm_s16be      |       |        |
+| .mpeg      | pcm_s24le      |       |        |
+| .mpeg      | pcm_s24be      |       |        |
+| .mpeg      | pcm_s32le      |       |        |
+| .mpeg      | pcm_s32be      |       |        |
+| .mpeg      | speex          |       |        |
+| .mpeg      | vorbis         |       |        |
+| .mpeg      | wmav1          |       |        |
+| .mpeg      | wmav2          |       |        |
+| .mkv       | aac            |       |        |
+| .mkv       | alac           |       |        |
+| .mkv       | flac           |       |        |
+| .mkv       | mp3            |       |        |
+| .mkv       | opus           |       |        |
+| .mkv       | pcm_alaw       |       |        |
+| .mkv       | pcm_mulaw      |       |        |
+| .mkv       | pcm_s8         |       |        |
+| .mkv       | pcm_s16le      |       |        |
+| .mkv       | pcm_s16be      |       |        |
+| .mkv       | pcm_s24le      |       |        |
+| .mkv       | pcm_s24be      |       |        |
+| .mkv       | pcm_s32le      |       |        |
+| .mkv       | pcm_s32be      |       |        |
+| .mkv       | speex          |       |        |
+| .mkv       | vorbis         |       |        |
+| .mkv       | wmav1          |       |        |
+| .mkv       | wmav2          |       |        |
+| .ts        | aac            |       |        |
+| .ts        | alac           |       |        |
+| .ts        | flac           |       |        |
+| .ts        | mp3            |       |        |
+| .ts        | opus           |       |        |
+| .ts        | pcm_alaw       |       |        |
+| .ts        | pcm_mulaw      |       |        |
+| .ts        | pcm_s8         |       |        |
+| .ts        | pcm_s16le      |       |        |
+| .ts        | pcm_s16be      |       |        |
+| .ts        | pcm_s24le      |       |        |
+| .ts        | pcm_s24be      |       |        |
+| .ts        | pcm_s32le      |       |        |
+| .ts        | pcm_s32be      |       |        |
+| .ts        | speex          |       |        |
+| .ts        | vorbis         |       |        |
+| .ts        | wmav1          |       |        |
+| .ts        | wmav2          |       |        |
+| .webm      | aac            |       |        |
+| .webm      | alac           |       |        |
+| .webm      | flac           |       |        |
+| .webm      | mp3            |       |        |
+| .webm      | opus           |       |        |
+| .webm      | pcm_alaw       |       |        |
+| .webm      | pcm_mulaw      |       |        |
+| .webm      | pcm_s8         |       |        |
+| .webm      | pcm_s16le      |       |        |
+| .webm      | pcm_s16be      |       |        |
+| .webm      | pcm_s24le      |       |        |
+| .webm      | pcm_s24be      |       |        |
+| .webm      | pcm_s32le      |       |        |
+| .webm      | pcm_s32be      |       |        |
+| .webm      | speex          |       |        |
+| .webm      | vorbis         |       |        |
+| .webm      | wmav1          |       |        |
+| .webm      | wmav2          |       |        |
+| .wmv       | aac            |       |        |
+| .wmv       | alac           |       |        |
+| .wmv       | flac           |       |        |
+| .wmv       | mp3            |       |        |
+| .wmv       | opus           |       |        |
+| .wmv       | pcm_alaw       |       |        |
+| .wmv       | pcm_mulaw      |       |        |
+| .wmv       | pcm_s8         |       |        |
+| .wmv       | pcm_s16le      |       |        |
+| .wmv       | pcm_s16be      |       |        |
+| .wmv       | pcm_s24le      |       |        |
+| .wmv       | pcm_s24be      |       |        |
+| .wmv       | pcm_s32le      |       |        |
+| .wmv       | pcm_s32be      |       |        |
+| .wmv       | speex          |       |        |
+| .wmv       | vorbis         |       |        |
+| .wmv       | wmav1          |       |        |
+| .wmv       | wmav2          |       |        |
 
 

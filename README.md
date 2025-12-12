@@ -26,7 +26,7 @@ SimpleMP fixes this by providing a well-defined, safe, high-level API that handl
 * Error handling and reporting
 * So developers can focus on using it, not debugging it.
 
-## Core Features
+## Features
 ### Simple, high-level API
 
 ```
@@ -45,6 +45,13 @@ No direct FFmpeg arguments.
 No command strings.
 Safe, predictable, declarative config.
 
+## Installation
+
+Available on PyPI:
+
+` pip install simplemp `
+
+Requires FFmpeg with libav support.
 
 ## Deterministic Validation Layer
 
@@ -128,6 +135,11 @@ Example of the test matrix:
 Total more than 150 tests has logged in the test matrix. 
 Check ` docs/TEST_MATRIX.md ` for more details.
 
+## Author
+
+Main api created by S.M Sadat 
+and TUI is being developed by Atia Farha
+
 ## Future Plan: High-Performance C++ Edition
 
 A C++ backend is planned using libav*, with:
@@ -159,14 +171,6 @@ fast to prototype
 low-latency
 ultra-high-performance
 enterprise-ready
-
-## Installation
-
-Coming soon on PyPI:
-
-` pip install simplemp `
-
-Requires FFmpeg with libav support.
 
 ## Philosophy
 
@@ -202,7 +206,3 @@ Test matrix PDF export: Check ` docs/TEST_MATRIX.md `
 Open source, permissive license.
 To be finalized.
 
-## Author
-
-Main api created by S.M Sadat 
-and TUI is being developed by Atia Farha

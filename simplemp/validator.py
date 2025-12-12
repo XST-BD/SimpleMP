@@ -34,7 +34,7 @@ codec_dict = {
     ".mp4"  : ["h264", "hevc", "mpeg4", "av1"],
     ".mpg"  : ["mpeg1video", "mpeg2video"],
     ".mpeg" : ["mpeg1video", "mpeg2video"],
-    ".mkv"  : ["h264", "hevc", "mpeg4"],
+    ".mkv"  : ["h264", "hevc", "mpeg4"], 
     ".ts"   : ["h264", "hevc", "mpeg2video"],
     ".webm" : ["vp8", "vp9", "av1"],    # only [opus, vorbis] audio codec supported | Extremely slow if wrong settings used
     ".wmv"  : ["wmv1"],
@@ -161,8 +161,10 @@ audio_sample_fmt_dict = {
     "wmav2": ["s16"],
 }
 
-# check pixel formant against codec
-video_sample_fmt_dict1 = {
+# Check pixel formant against codecs and extensions
+pixel_fmt_dict = {
+
+    # Check against codecs
     "av1": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le"],
 
     "h264": ["yuv420p", "yuv422p", "yuv444p", "nv12"],
@@ -182,14 +184,22 @@ video_sample_fmt_dict1 = {
     "mpeg4": ["yuv420p"],
     "wmv1" : ["yuv420p"],
     "wmv2" : ["yuv420p"],
+
+    # Check against extensions
+    ".asf": ["yuv420p"],
+    ".avi": ["yuv420p", "nv12"],
+    ".flv": ["yuv420p", "nv12"],
+    ".m4v": ["yuv420p", "nv12"],
+    ".mkv": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le", "nv12"],
+    ".mov": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le", "nv12"],
+    ".mp4": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "nv12"],
+    ".mpg": ["yuv420p"],
+    ".mpeg": ["yuv420p"],
+    ".ts": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "nv12"],
+    ".webm": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le"],
+    ".wmv": ["yuv420p"],
 }
 
-# check pixel formant against format (extension)
-video_sample_fmt_dict2 = {
-    ".avi": ["yuv420p"],
-    ".mkv": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le", "nv12"],
-    ".webm": ["yuv420p", "yuv422p", "yuv444p", "yuv420p10le", "yuv422p10le", "yuv444p10le"],
-}
 
 frame_rate_dict = {
     "mpeg4" : [24, 120],
@@ -309,16 +319,16 @@ def checkAudioSamplefmtCompatibility(codecname : str, sample_fmt : str) -> bool:
 
 def checkVideoSamplefmtCompatibility(ext, codecname, pixel_fmt) -> bool:
 
-    if pixel_fmt not in video_sample_fmt_dict2[ext]: 
+    if pixel_fmt not in pixel_fmt_dict[ext]: 
         print(f"SampleMP: Incompatible sample format for extension: {ext}\n"
               "Supported sample formats: \n"
-              f"{video_sample_fmt_dict2[ext]}") 
+              f"{pixel_fmt_dict[ext]}") 
         return False
 
-    if pixel_fmt not in video_sample_fmt_dict1[codecname]:
+    if pixel_fmt not in pixel_fmt_dict[codecname]:
         print(f"SampleMP: Incompatible sample format for codec: {codecname}\n"
               "Supported sample formats: \n"
-              f"{video_sample_fmt_dict1[codecname]}") 
+              f"{pixel_fmt_dict[codecname]}") 
         return False
     
     return True 
