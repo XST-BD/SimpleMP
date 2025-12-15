@@ -58,6 +58,8 @@ def processMedia(
 def smpcore(
         inputfilename : str,
         outputfilename : str,
+        thread_count : int, 
+        thread_type : str,
         mute : bool,
 
         # Audio
@@ -97,6 +99,8 @@ def smpcore(
             ))
             
             ostreama.bit_rate = bitrate
+            ostreama.codec_context.thread_count = thread_count
+            ostreama.codec_context.thread_type = thread_type
             
             resampler = AudioResampler(
                 format=sample_fmt, 

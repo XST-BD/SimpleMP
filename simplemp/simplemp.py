@@ -14,16 +14,17 @@ def transcode(
     output_file: str = "",
     overwrite: bool = False,        
     debug: bool = False,            
-    threads: int = 0,               
+    thread_count: int = 0,        
+    thread_type: str = "AUTO",       
     mute: bool = False,             
     loop: int = 0,                  
 
-    codec_audio: str = "",          
+    audio_encoder: str = "",          
     samplerate: int = 44100,        
     sample_fmt: str = "",          
     bitrate_audio: int = 192000,         
 
-    codec_video: str = "",          
+    video_encoder: str = "",          
     pixel_fmt: str = "",            
     bitrate_video: int = 192000,     
     resolution = (int, int),        
@@ -59,10 +60,15 @@ def transcode(
         Enable verbose debug output.
         Default is ``False``.
 
-    threads : int, optional
+    thread_count : int, optional
         Number of FFmpeg threads to use.
         ``0`` means automatic thread selection.
         Default is ``0``.
+
+    thread_type : strm optional
+        Types of threading to use,
+        Default is ``AUTO``
+        Available options: ``AUTO`` ``FRAME`` ``SLICE``
 
     mute : bool, optional
         Remove the audio stream from the output.
@@ -179,7 +185,7 @@ def transcode(
     ext = os.path.splitext(output_file)[1].lower()
     if not check_media_compat(
         ext, 
-        audio_codecname=codec_audio, video_codecname=codec_video, 
+        audio_codecname=audio_encoder, video_codecname=video_encoder, 
         samplerate=samplerate, samplefmt=sample_fmt, pixel_fmt=pixel_fmt,
         bitrate=bitrate_audio, bitrate_video=bitrate_video,
         mediatype=mediatype,
@@ -190,13 +196,13 @@ def transcode(
     width, height = resolution
 
     smpcore(
-                input_file, output_file, mute=mute,
+                input_file, output_file, thread_count=thread_count, thread_type=thread_type, mute=mute,
 
                 # Audio
-                audio_codecname=codec_audio, bitrate=bitrate_audio, sample_fmt=sample_fmt, sample_rate=samplerate, 
+                audio_codecname=audio_encoder, bitrate=bitrate_audio, sample_fmt=sample_fmt, sample_rate=samplerate, 
 
                 # Video
-                video_codecname=codec_video, bitrate_vdo=bitrate_video, frame_rate=frame_rate, pixel_fmt=pixel_fmt,
+                video_codecname=video_encoder, bitrate_vdo=bitrate_video, frame_rate=frame_rate, pixel_fmt=pixel_fmt,
                 width=width, height=height, preset=preset, tune=tune, profile=profile, crf=crf,   
                 mediatype=mediatype,     
             )

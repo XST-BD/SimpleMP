@@ -26,29 +26,54 @@ codec_dict = {
 
     # Video
 
-    ".asf"  : ["wmv1", "wmv2"],
-    ".avi"  : ["mpeg4", "h264", "hevc"],
-    ".flv"  : ["flv", "h264"],
-    ".m4v"  : ["h264", "mpeg4"],
-    ".mov"  : ["h264", "hevc", "mpeg4"],
-    ".mp4"  : ["h264", "hevc", "mpeg4", "av1"],
-    ".mpg"  : ["mpeg1video", "mpeg2video"],
-    ".mpeg" : ["mpeg1video", "mpeg2video"],
-    ".mkv"  : ["h264", "hevc", "mpeg4"], 
-    ".ts"   : ["h264", "hevc", "mpeg2video"],
-    ".webm" : ["vp8", "vp9", "av1"],    # only [opus, vorbis] audio codec supported | Extremely slow if wrong settings used
-    ".wmv"  : ["wmv1"],
+    ".asf"  : ["wmv1", "wmv2",
+               "aac", "flac", "mp3", "pcm_alaw", "pcm_mulaw", "pcm_s16le", "wmav1", "wmav2"],
+
+    ".avi"  : ["mpeg4", "h264", "hevc",
+               "aac", "flac", "mp3", "pcm_alaw", "pcm_mulaw", "pcm_s16le", "pcm_s24le", "pcm_s32le", "vorbis", "wmav1", "wmav2"],
+
+    ".flv"  : ["flv", "h264",
+               "aac", "mp3", "opus"],
+
+    ".m4v"  : ["h264", "mpeg4",
+               "aac", "alac"],
+
+    ".mov"  : ["h264", "hevc", "mpeg4",
+               "aac", "alac", "mp3", "pcm_alaw", "pcm_mulaw", "pcm_s8", "pcm_s16le", "pcm_s16be", "pcm_s24le", "pcm_s24be", "pcm_s32le", "pcm_s32be"],
+
+    ".mp4"  : ["h264", "hevc", "mpeg4", "av1",
+               "aac", "alac", "flac", "mp3", "opus", 
+               "pcm_alaw", "pcm_mulaw", "pcm_s8", "pcm_s16le", "pcm_s16be", "pcm_s24le", "pcm_s24be", "pcm_s32le", "pcm_s32be", 
+               "speex", "vorbis", "wmav1", "wmav2"],
+
+    ".mpg"  : ["mpeg1video", "mpeg2video",
+               "mp3", "pcm_s16be" ],
+
+    ".mpeg" : ["mpeg1video", "mpeg2video",
+               "mp3", "pcm_s16be"],
+
+    ".mkv"  : ["h264", "hevc", "mpeg4",
+               "aac", "alac", "flac", "mp3", "opus", "pcm_s16le", "pcm_s16be", "pcm_s24le", "pcm_s24be", "pcm_s32le", "pcm_s32be"], 
+
+    ".ts"   : ["h264", "hevc", "mpeg2video",
+               "aac", "alac", "mp3", "pcm_alaw", "pcm_mulaw", "pcm_s8", "pcm_s16le", "pcm_s16be", "pcm_s24le", "pcm_s24be", "pcm_s32le", "pcm_s32be", "wmav1", "wmav2"],
+
+    # Extremely slow if wrong settings used
+    ".webm" : ["vp8", "vp9", "av1",
+               "opus", "vorbis"], 
+    ".wmv"  : ["wmv1"
+               "aac", "flac", "mp3", "pcm_alaw", "pcm_mulaw", "pcm_s16le", "pcm_s24be", "pcm_s32be", "wmav1", "wmav2"],
 }
 
-audio_codecs = {"aac", "alac", 
-                "flac", 
-                "mp3",
-                "opus",
-                "pcm_alaw", "pcm_mulaw", "pcm_s8", "pcm_s16le", "pcm_s16be", "pcm_s24le", "pcm_s24be", "pcm_s32le", "pcm_s32be", 
-                "speex",
-                "vorbis",
-                "wmav1", "wmav2", 
-            }
+audio_codecs = {
+    "aac", "alac", "flac", "mp3", "opus",
+    "pcm_alaw", "pcm_mulaw", "pcm_s8", "pcm_s16le", "pcm_s16be", "pcm_s24le", "pcm_s24be", "pcm_s32le", "pcm_s32be", 
+    "speex", "vorbis", "wmav1", "wmav2"
+}
+
+video_codecs = {
+    "av1", "flv", "h264", "hevc", "mpeg1video", "mpeg2video", "mpeg4", "vp8", "vp9", "wmv1", "wmv2"
+}
 
 bitrate_range_dict = {
 
@@ -229,7 +254,7 @@ media_type_ext_dict = {
     "video": [
         ".asf", ".avi",
         ".flv",
-        ".m4v" , ".mkv", ".mov", ".mp4", ".mpg", "mpeg",
+        ".m4v" , ".mkv", ".mov", ".mp4", ".mpg", ".mpeg",
         ".ts",
         ".webm", ".wmv",
     ],
