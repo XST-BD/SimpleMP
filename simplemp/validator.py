@@ -390,6 +390,7 @@ def check_media_compat(ext : str,
                 if not check_samplefmt_compat(audio_codecname, samplefmt): return False
 
             if not check_codec_compat(ext, video_codecname): return False
+            if not check_codec_compat(ext, audio_codecname): return False
             if not check_bitrate_compat(video_codecname, bitrate_video): return False
             if not check_pixfmt_compat(ext, video_codecname, pixel_fmt): return False
 

@@ -18,10 +18,8 @@ FFmpeg is powerful, but:
 SimpleMP fixes this by providing a well-defined, safe, high-level API that handles:
 
 * Input introspection
-* Codec capability validation
-* Sample format negotiation
-* Channel layout enforcement
-* Sample rate clamping
+* Encoder, format and options compatibility validation
+* Sample rate and bitrate safe range
 * Container compatibility checks
 * Error handling and reporting
 * So developers can focus on using it, not debugging it.
@@ -30,14 +28,11 @@ SimpleMP fixes this by providing a well-defined, safe, high-level API that handl
 ### Simple, high-level API
 
 ```
-from simplemp.simplemp import transcode
+from simplemp import transcode
 
 transcode(
-    inputfilename="../dump/testv0.0.3/next.mp3", outputfilename="../dump/testv0.0.3/next1.aifc",
-    codec_audio="pcm_s32be", samplerate=48000, bitrate=128000, sample_fmt="s32p",
-    # codec_video="vp9", bitrate_video=4000000, pixel_fmt="yuv422p", frame_rate=60, crf=24, preset="slow", profile="baseline", tune="zerolatency",
-    # width=1280, height=720,
-    mute=False, debug=True, overwrite=False
+    input_file="/path/to/inputfile", output_file="/path/to/outputfile",
+    audio_encoder="wmav1", video_encoder="h264",
 )
 ```
 
@@ -51,7 +46,7 @@ Available on PyPI:
 
 ` pip install simplemp `
 
-Requires FFmpeg with libav support.
+Requires ` av ` and ` numpy `
 
 ## Deterministic Validation Layer
 
@@ -71,9 +66,7 @@ bitrate sanity checks
 
 output path and directory checks
 
-Over 30 validation tests are executed against supported formats.
-
-Industrial reliable correctness, in Python.
+Over 400 validation tests are executed against supported formats.
 
 
 ## Codec Support (Audio)
@@ -133,7 +126,7 @@ Example of the test matrix:
 | .mkv       | vp8       | yuv444p       |   ❌   |
 
 Total more than 150 tests has logged in the test matrix. 
-Check ` docs/TEST_MATRIX.md ` for more details.
+Check ` docs/testing/TEST_MATRIX.md ` for more details.
 
 ## Author
 
@@ -185,11 +178,9 @@ Developer experience is a feature.
 
 ## Documentation
 
-API usage guide (coming soon)
-Examples (coming soon)
-Preset configuration
-Benchmark results
-Test matrix PDF export: Check ` docs/TEST_MATRIX.md `
+API usage guide: Check ` docs/api/ `
+Examples: Check ` docs/examples/ `
+Test matrix: Check ` docs/TEST_MATRIX.md `
 
 ## Contributing
 
@@ -205,4 +196,8 @@ Test matrix PDF export: Check ` docs/TEST_MATRIX.md `
 
 Open source, permissive license.
 To be finalized.
+
+## Warning
+
+API is still in it's early development phase, so expect some instability
 
