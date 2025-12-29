@@ -35,22 +35,23 @@ def processMedia(
 
             info = stream_map[packet.stream_index]
 
-            for frame in packet.decode():
+            if packet.stream.type in ("audio", "video", "subtitle"):
+                for frame in packet.decode():
 
-                if info["type"] == "audio":
-                    if not mute: 
-                        frame = info["resampler"].resample(frame)
-                        for f in frame:
-                            for outpacket in info["ostream"].encode(f):
-                                outcontainer.mux(outpacket)
+                    if info["type"] == "audio":
+                        if not mute: 
+                            frame = info["resampler"].resample(frame)
+                            for f in frame:
+                                for outpacket in info["ostream"].encode(f):
+                                    outcontainer.mux(outpacket)
 
-                elif info["type"] == "video": 
-                    rescaled_frame = frame.reformat(width=width, height=height, format="yuv420p") # type: ignore
-                    for outpacket in info["ostream"].encode(rescaled_frame):
-                        outcontainer.mux(outpacket)
+                    elif info["type"] == "video": 
+                        rescaled_frame = frame.reformat(width=width, height=height, format="yuv420p") # type: ignore
+                        for outpacket in info["ostream"].encode(rescaled_frame):
+                            outcontainer.mux(outpacket)
             
-                elif info["type"] == "subtitle":
-                    outcontainer.mux(packet)
+                    elif info["type"] == "subtitle":
+                        outcontainer.mux(packet)
 
     # Flush all streams
     for info in stream_map.values():
@@ -139,7 +140,7 @@ def smpcore(
             stream_map[istreams.index] = {"type":"video", "ostream":ostreamv}
 
         else: 
-            print('SimpleMP: Unknown media stream detected')
+            print(f'SimpleMP: Unknown media stream detected\nType:{istreams.type}\n')
 
 
     processMedia(incontainer, outcontainer, mediatype, stream_map, width, height, mute, loop=loop)

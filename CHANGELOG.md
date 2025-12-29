@@ -2,6 +2,10 @@
 All notable changs of the project documented here
 
 ## [0.7.4]
+### Fix
+- Fix process loop not running for loop = 0 and accidental attemp of decoding data stream
+
+## [0.7.4]
 ### Add
 - Automatic dependencies installation
 

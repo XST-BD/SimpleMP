@@ -17,7 +17,7 @@ def transcode(
     thread_count: int = 0,        
     thread_type: str = "AUTO",       
     mute: bool = False,             
-    loop: int = 0,                  
+    loop: int = 1,                  
 
     audio_encoder: str = "",          
     samplerate: int = 44100,        

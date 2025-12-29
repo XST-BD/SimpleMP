@@ -1,3 +1,6 @@
+from math import log
+from .logs import logstring
+
 # don't remove . from keys. It's for explicitly describing extension name
 codec_dict = {
 
@@ -264,7 +267,8 @@ def check_codec_compat(ext : str, codecname : str) -> bool:
 
     # 1: Check extension
     if ext not in codec_dict : 
-        print(f"SimpleMP: Unknownn media file extension: {codecname}")
+        logstring = f"SimpleMP: Unknownn media file extension: {codecname}"
+        print(logstring)
         return False
 
     if codecname == "": return True     # in case of defaults
@@ -272,14 +276,14 @@ def check_codec_compat(ext : str, codecname : str) -> bool:
     # 2: Check codec existence
     all_codecs = {c for codecs in codec_dict.values() for c in codecs}
     if codecname not in all_codecs:
-        print(f"SimpleMP: Unknown codec found: {codecname}")
+        logstring = f"SimpleMP: Unknown codec found: {codecname}"
+        print(logstring)
         return False
 
     # 3: Check codec compatibility with file extension
     if codecname not in codec_dict[ext]: 
-        print(f"SimpleMP: Unsupported codec[{codecname}] for converstion to {ext}\n"
-              f"Supported codecs are:\n"
-              f"{codec_dict[ext]}")
+        logstring = f"SimpleMP: Unsupported codec[{codecname}] for converstion to {ext}\nSupported codecs are:\n{codec_dict[ext]}"
+        print(logstring)
         return False
 
     return True
@@ -289,7 +293,8 @@ def check_audio_codec(codecname : str) -> bool:
     if codecname == "": return True     # in case of defaults
 
     if codecname not in audio_codecs:
-        print(f"SimpleMP: Unknown audio codec[{codecname}] found: {codecname}")
+        logstring = f"SimpleMP: Unknown audio codec[{codecname}] found: {codecname}"
+        print(logstring)
         return False
     
     return True
@@ -301,8 +306,9 @@ def check_bitrate_compat(codecname : str, bitrate : int) -> bool:
         return True
 
     if bitrate < bitrate_range_dict[codecname][0] or bitrate > bitrate_range_dict[codecname][1]: 
-        print(f"SimpleMP: Bitrate outside safe range for codec: {codecname}\n"
-              f"Safe range: [{bitrate_range_dict[codecname][0]},{bitrate_range_dict[codecname][1]}]")
+        logstring = (f"SimpleMP: Bitrate outside safe range for codec: {codecname}\n"
+            f"Safe range: [{bitrate_range_dict[codecname][0]},{bitrate_range_dict[codecname][1]}]")
+        print(logstring)
         return False
 
     return True
@@ -311,15 +317,17 @@ def check_samplerate_compat(codecname : str, samplerate) -> bool:
         
     if codecname == "aac" or codecname == "wmav1" or codecname == "wmav2" or codecname == "mp3":
         if samplerate not in samplerate_range_dict[codecname]: 
-            print(f"SimpleMP: {codecname} only supports following sample rates:\n"
+            logstring = (f"SimpleMP: {codecname} only supports following sample rates:\n"
                   f"{samplerate_range_dict[codecname]}")
+            print(logstring)
             return False
         return True
 
 
     if samplerate < samplerate_range_dict[codecname][0] or samplerate > samplerate_range_dict[codecname][1]: 
-        print(f"SimpleMP: Sample rate outside safe range for codec: {codecname}\n"
+        logstring = (f"SimpleMP: Sample rate outside safe range for codec: {codecname}\n"
               f"Safe range: [{samplerate_range_dict[codecname][0]},{samplerate_range_dict[codecname][1]}]")
+        print(logstring)
         return False
 
     return True
@@ -335,9 +343,10 @@ def check_samplefmt_compat(codecname : str, sample_fmt : str) -> bool:
         return True
 
     if sample_fmt not in audio_sample_fmt_dict[codecname]:
-        print(f"SampleMP: Incompatible sample format: {sample_fmt} for codec: {codecname}\n"
+        logstring = (f"SampleMP: Incompatible sample format: {sample_fmt} for codec: {codecname}\n"
               "Supported sample formats: \n"
               f"{audio_sample_fmt_dict[codecname]}") 
+        print(logstring)
         return False
     
     return True 
@@ -345,15 +354,17 @@ def check_samplefmt_compat(codecname : str, sample_fmt : str) -> bool:
 def check_pixfmt_compat(ext, codecname, pixel_fmt) -> bool:
 
     if pixel_fmt not in pixel_fmt_dict[ext]: 
-        print(f"SampleMP: Incompatible sample format for extension: {ext}\n"
+        logstring = (f"SampleMP: Incompatible sample format for extension: {ext}\n"
               "Supported sample formats: \n"
               f"{pixel_fmt_dict[ext]}") 
+        print(logstring)
         return False
 
     if pixel_fmt not in pixel_fmt_dict[codecname]:
-        print(f"SampleMP: Incompatible sample format for codec: {codecname}\n"
+        logstring = (f"SampleMP: Incompatible sample format for codec: {codecname}\n"
               "Supported sample formats: \n"
               f"{pixel_fmt_dict[codecname]}") 
+        print(logstring)
         return False
     
     return True 
@@ -405,30 +416,36 @@ def check_media_compat(ext : str,
 def check_CPPT_compat(codecname : str, crf : int, profile : str, preset : str, tune : str) ->  bool:
 
     if codecname not in codec_cppt_support_list and codecname not in codec_cpp_support_list: 
-        print(f"SimpleMP: Codec: {codecname} doesn't support crf, preset, profile and tune")
+        logstring = (f"SimpleMP: Codec: {codecname} doesn't support crf, preset, profile and tune")
+        print(logstring)
         return False
     
     if crf not in range(0, 51):
-        print(f"SimpleMP: crf outside practical range [0, 51]")
+        logstring = (f"SimpleMP: crf outside practical range [0, 51]")
+        print(logstring)
         return False 
     
     if profile not in profile_list: 
-        print(f"SimpleMP: Profile: {profile} is unavailable to use or unavailable or non-exitentn\n"
+        logstring = (f"SimpleMP: Profile: {profile} is unavailable to use or unavailable or non-exitentn\n"
               f"Available: {profile_list}")
+        print(logstring)
         return False
     
     if preset not in preset_list: 
-        print(f"SimpleMP: Preset: {preset} is unavailable to use or unavailable or non-exitent\n"
+        logstring = (f"SimpleMP: Preset: {preset} is unavailable to use or unavailable or non-exitent\n"
               f"Available: {preset_list}")
+        print(logstring)
         return False
 
     if tune not in tune_list: 
-        print(f"SimpleMP: Profile: {profile} is unavailable to use or unavailable or non-exitent\n"
+        logstring = (f"SimpleMP: Profile: {profile} is unavailable to use or unavailable or non-exitent\n"
               f"Available : {tune_list}")
+        print(logstring)
         return False
     
     if tune in tune_list and codecname in codec_cpp_support_list:
-        print(f"SimpleMP: Codec: {codecname} doesn't support tune")
+        logstring = (f"SimpleMP: Codec: {codecname} doesn't support tune")
+        print(logstring)
         return False
 
     return True
