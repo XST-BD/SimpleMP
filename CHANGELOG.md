@@ -1,6 +1,10 @@
 # Change Log
 All notable changs of the project documented here
 
+## [0.7.4]
+### Add
+- Automatic dependencies installation
+
 ## [0.7.3] 
 ### Changed
 - Extended validation and stabilized API

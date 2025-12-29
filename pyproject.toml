@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "simplemp"  # The name on PyPI
-version = "0.7.3"
+version = "0.7.4"
 description = "Python-first media processing API"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -13,7 +13,10 @@ authors = [
   {name = "S.M Sadat", email = "smsadat788@gmail.com"}
 ]
 
-
+dependencies = [
+  "av>=10.0.0",
+  "typeguard>=4.0.0"
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
